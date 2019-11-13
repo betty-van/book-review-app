@@ -59,5 +59,17 @@ def results():
 def is_registered():
     name= request.form.get("name")
     password= request.form.get("password")
-    headline="Successful registration."
-    return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
+
+    # Check to see if name and password is already in the table
+    accounts = db.execute("SELECT name, password FROM users WHERE name = :name AND password = :password", {"name": name, "password": password}).fetchone()
+    alreadyRegistered = accounts != None
+    if alreadyRegistered: 
+        headline="You already have an account. Please log in by clicking the link below to be redirected back to the home page."
+        return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
+    else:
+        # If name and password is NOT in the table, insert it into the table
+        db.execute("INSERT INTO users (name, password) VALUES (:name, :password)", {"name": name, "password": password})
+        headline="Successful registration. Please log in by clicking the link below to be redirected back to the home page."
+        return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
+    db.commit()
+    
