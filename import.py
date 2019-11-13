@@ -8,34 +8,20 @@ from sys import argv, exit
 import csv
 
 # Interact with a SQL database
-db = sqlalchemy("postgres://xpsrascgzfgxzm:b7668097ffd03198d922523344120670dd76f03a849c9977a804cd2ab5631c46@ec2-54-197-239-115.compute-1.amazonaws.com:5432/d2ebb11rclhqv")
+# database engine object from SQLAlchemy that manages connections to the database
+# DATABASE_URL is an environment variable that indicates where the database lives
+engine = create_engine(os.getenv("DATABASE_URL"))
 
-# Don't need to CREATE table since it already exists in the db
+# create a 'scoped session' that ensures different users' interactions with the database are kept separate
+db = scoped_session(sessionmaker(bind=engine))
 
-# Check that usage was appropriate
-if len(argv) != 2:
-    print("[Usage]: python import.py <csv>")
-    exit(1)
+f = open("books.csv")
+reader = csv.reader(f)
 
-databaseFileName = argv[1]
-fields =[]
-rows =[]
-names = []
 
-# Opens database file and stores in a dictionary
-with open(databaseFileName) as csvfile:
-    csvReader = csv.DictReader(csvfile)
+# loop gives each column a name
+for isbn, title, author, year in reader: 
+    db.execute("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)", {"isbn": isbn, "title": title, "author": author, "year": year }) 
+    print("Added {} book published in {} with ISBN number {} written by {}".format(title, year, isbn, author))
+db.commit()
 
-    # Extracts row data one by one
-    for row in csvReader:
-        rows.append(row)
-
-# Inserts house and birth into the db
-for row in rows:
-    # Parse the string for first, middle, and last name
-    name = row["name"].split()
-
-    if len(name) == 2:
-        name.insert(1, "NULL")
-
-    db.execute("INSERT INTO students (first, middle, last, house, birth) VALUES (?, ?, ?, ?, ?)", name[0], name[1], name[2], row["house"], row["birth"])

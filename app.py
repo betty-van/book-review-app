@@ -54,3 +54,10 @@ def results():
     author=request.form.get("author")
     headline="Your search results are below."
     return render_template("search-result.html", headline=headline, isbn=isbn, title=title, author=author)
+
+@app.route("/registrationsuccess", methods=["POST"])
+def is_registered():
+    name= request.form.get("name")
+    password= request.form.get("password")
+    headline="Successful registration."
+    return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
