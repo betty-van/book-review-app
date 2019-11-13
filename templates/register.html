@@ -1,16 +1,11 @@
 {% extends "layout.html" %}
 
-    <!-- Heading -->
-    {% block heading %}
-        Please register using the form below:
-    {% endblock %}
-
     <!-- Body -->
     {% block body %}
     <!-- Login/Registration form -->
     <form action="register" method="post">
         <div class="inputwrapper">
-            <label for="name">Username: </label><input type="text" name="user_id">
+            <label for="name">Username: </label><input type="text" name="name">
         </div>
         <div class="inputwrapper">
             <label for="password">Password: </label><input type="password" name="password">

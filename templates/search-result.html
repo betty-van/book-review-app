@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+    <!-- Heading -->
+    {% block heading %}
+        {{ headline }}
+    {% endblock %}
+
+    <!-- Body -->
+    {% block body %}
+    <!-- Testing the post request -->
+    <p>Successful search.</p>
+    
+    <p>The ISBN number is {{ isbn }}.</p>
+    <p>The author is {{ author }}.</p>
+    <p>The title of the book is {{ title }}.</p>
+    
+    <a href="{{ url_for('logout') }}">Click here to logout.</a>
+    {% endblock %}

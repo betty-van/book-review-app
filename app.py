@@ -4,7 +4,7 @@
 import os
 
 import requests
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -34,3 +34,23 @@ def index():
 def register():
     headline="Enter the following details to make an account."
     return render_template("register.html", headline=headline)
+
+@app.route("/search", methods=["POST"])
+def search():
+    name= request.form.get("name")
+    password= request.form.get("password")
+    headline="Fill out the form below to start searching for books."
+    return render_template("search.html", headline=headline, name=name,  password=password)
+
+@app.route("/logout")
+def logout():
+    headline="You have successfully logged out."
+    return render_template("logout.html", headline=headline)
+
+@app.route("/results", methods=["POST", "GET"])
+def results():
+    isbn=request.form.get("isbn")
+    title=request.form.get("title")
+    author=request.form.get("author")
+    headline="Your search results are below."
+    return render_template("search-result.html", headline=headline, isbn=isbn, title=title, author=author)
