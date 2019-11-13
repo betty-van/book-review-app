@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Review website</title>
+
+    <!-- CSS Styling -->
+    <style>
+    body {
+        text-align: center;
+    }
+
+    form .inputwrapper {
+        padding: 10px;
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+    </style>
+
+
+</head>
+
+<!-- Body of page -->
+<body>
+    <h1>Book Review Website</h1>
+    <h2>{% block heading %}{% endblock %}</h2>
+
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
