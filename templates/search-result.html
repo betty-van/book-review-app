@@ -3,12 +3,12 @@
     <!-- Body -->
     {% block body %}
     <!-- Testing the post request -->
-    <h1>Search Results</h1>
+    <h2>Search Results</h2>
     
     <ul>
         {% for book in books %}
             <li>
-                <p>Book ID: {{ book.id }}</p>
+                <p>Book ID: {{ book.book_id }}</p>
                 <p><b>Book title: {{ book.title }}</b></p> 
                 <p>Book author: {{ book.author }}</p>
                 <p>ISBN number: {{ book.isbn }}</p>

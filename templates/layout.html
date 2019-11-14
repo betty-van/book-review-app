@@ -14,12 +14,27 @@
         text-align: center;
     }
 
+    header {
+        display: flex;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 50px;
+        background-color: #3a7bb3;
+        background-image: linear-gradient(120deg, #3a7bb3 12%, #493e84 89%, #92d9f5 100%);
+    }
+
+    h1 {
+        color: rgb(243, 237, 237);
+    }
+
     form .inputwrapper {
         padding: 10px;
     }
 
     form {
-        margin-bottom: 20px;
+        margin: 10px auto 20px auto;
     }
 
     ul {
@@ -43,7 +58,9 @@
 
 <!-- Body of page -->
 <body>
-    <h1>Book Review Website</h1>
+    <header>
+        <h1>Book Review Website</h1>
+    </header>
     <h2>{% block heading %}{{ headline }}{% endblock %}</h2>
 
     {% block body %}
