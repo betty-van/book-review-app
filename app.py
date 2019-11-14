@@ -99,4 +99,17 @@ def is_registered():
         return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
     db.commit()   
 
+@app.route("/bookdetails/<int:book_id>")
+def bookdetails(book_id):
+    # List all details about a single book
+
+    # Make sure book exists by its book_id
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+    if book is None:
+        headline = "Book not found."
+        return render_template("error.html", headline=headline)
+    
+    # Get book details & render onto page
+    return render_template("bookdetails.html", book=book)
+
     

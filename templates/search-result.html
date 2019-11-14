@@ -12,10 +12,10 @@
                 <p><b>Book title: {{ book.title }}</b></p> 
                 <p>Book author: {{ book.author }}</p>
                 <p>ISBN number: {{ book.isbn }}</p>
+                <a href="{{ url_for('bookdetails', book_id=book.id) }}">Click here to more information.</a>
             </li>
         {% endfor %}
     </ul>
     
     <a href="{{ url_for('logout') }}">Click here to logout.</a><br>
-    <a href="{{ url_for('search') }}">Click  here to go back to search.</a>
     {% endblock %}
