@@ -71,6 +71,7 @@ def results():
 
     # List all books found in the db that matches
     # If ONLY ISBN is entered
+    # TODO FIX the ones that don't work
     if not(author and title):
         books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).rowcount == 0
@@ -138,6 +139,7 @@ def bookdetails(book_id):
     # Get book details & render onto page
     return render_template("bookdetails.html", book=book)
 
+# TODO
 @app.route("/review/<int:book_id>", methods=["POST", "GET"])
 def review(book_id):
     book_id = book_id
@@ -150,6 +152,8 @@ def review(book_id):
     if not reviewText or not rating:
         headline ="Could not submit review."
         return render_template("error.html", headline-headline)
+    
+    return render_template("bookdetails.html", review=review)
 
 # Check if review exists in database already for this user
     # Select * FROM reviews JOIN users ON reviews.user_id = users.name WHERE reviews.user_id = user_id

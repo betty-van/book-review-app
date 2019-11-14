@@ -12,7 +12,17 @@
     <p>Book ID: {{ book.id }}</p>
 
     <h2>Reviews</h2>
-    <p>TODO FROM GOODREADS</p>
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <p>{{ review.user_id }}</p>
+                <p>{{ review.rating }}</p>
+                <p>{{ review.review }}</p>
+            </li>
+        {% else %}
+            <li><p>No book reviews.</p></li>
+        {% endfor %}
+    </ul>
 
     <!-- Review submission form -->
     <h3>Fill out the form below to submit your own review.</h3>
