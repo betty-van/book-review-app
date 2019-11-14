@@ -70,8 +70,34 @@ def results():
     author=request.form.get("author")
 
     # List all books found in the db that matches
-    books =  db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).fetchall()
-    bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).rowcount == 0
+    # If ONLY ISBN is entered
+    if not(author and title):
+        books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).rowcount == 0
+    # Only isbn and author is filled out
+    if not title:
+        books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND author ILIKE :author", {"isbn": '%'+ isbn + '%', "author":'%'+ author + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND author ILIKE :author", {"isbn": '%'+ isbn + '%', "author":'%'+ author + '%'}).rowcount == 0
+    # Only isbn and title is filled out
+    if not author:
+        books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title", {"isbn": '%'+ isbn + '%', "title":'%'+ title + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title", {"isbn": '%'+ isbn + '%', "title":'%'+ title + '%'}).rowcount == 0
+    # If only author was filled out
+    if not(title and isbn):
+        books = db.execute("SELECT * FROM books WHERE author ILIKE :author", {"author": '%'+ author + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE author ILIKE :author", {"author": '%'+ author + '%'}).rowcount == 0
+    # Only author and title are filled in
+    if not isbn: 
+        books = db.execute("SELECT * FROM books WHERE title ILIKE :title AND author ILIKE :author", {"title": '%'+ title + '%', "author":'%'+ author + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE title ILIKE :title AND author ILIKE :author", {"title": '%'+ title + '%', "author":'%'+ author + '%'}).rowcount == 0
+    #  Only title is filled in
+    if not(author and isbn):
+        books = db.execute("SELECT * FROM books WHERE title ILIKE :title", {"title": '%'+ title + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE title ILIKE :title", {"title": '%'+ title + '%'}).rowcount == 0
+    # All fields are filled in
+    else:
+        books =  db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).rowcount == 0
     
     if bookNotFound:
         headline ="No book was found."
@@ -112,4 +138,21 @@ def bookdetails(book_id):
     # Get book details & render onto page
     return render_template("bookdetails.html", book=book)
 
+@app.route("/review/<int:book_id>", methods=["POST", "GET"])
+def review(book_id):
+    book_id = book_id
+    user_id=request.form.get("username")
+    rating=request.form.get("rating")
+    reviewText=request.form.get("reviewText")
+
+    print(f"{user_id} has added their review of {book_id} with a rating of {rating} and a review of {review}.")
+
+    if not reviewText or not rating:
+        headline ="Could not submit review."
+        return render_template("error.html", headline-headline)
+
+# Check if review exists in database already for this user
+    # Select * FROM reviews JOIN users ON reviews.user_id = users.name WHERE reviews.user_id = user_id
+# If it doesn't
+    # INSERT INTO reviews (book_id, user_id, review, rating) VALUES (:book_id, :user_id, :review, :rating), {'book_id': isbn, 'user_id': user_id, 'review': reviewText, 'rating':rating}
     

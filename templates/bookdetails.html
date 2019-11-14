@@ -12,7 +12,22 @@
     <p>Book ID: {{ book.id }}</p>
 
     <h2>Reviews</h2>
-    <p>TODO</p>
+    <p>TODO FROM GOODREADS</p>
+
+    <!-- Review submission form -->
+    <h3>Fill out the form below to submit your own review.</h3>
+    <form action="{{ url_for('review', book_id=book.id) }}" method="post">
+        <div class="inputwrapper">
+            <label for="username">Username: </label><input type="text" name="username">
+        </div>
+        <div class="inputwrapper">
+            <textarea name="reviewText" cols="100" rows="10">Type your review here...</textarea>
+        </div>
+        <div class="inputwrapper">
+            <label for="rating">Rating (from 1 to 5): </label><input type="number" name="rating" min="1" max="5">
+        </div>
+        <button>Submit Review</button>
+    </form>
     
     <a href="{{ url_for('logout') }}">Click here to logout.</a><br>
     {% endblock %}
