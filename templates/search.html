@@ -1,14 +1,9 @@
 {% extends "layout.html" %}
 
-    <!-- Heading -->
-    {% block heading %}
-        {{ headline }}
-    {% endblock %}
-
     <!-- Body -->
     {% block body %}
     <!-- Testing the post request -->
-    <p>Successful login.</p>
+    <p>Enter one of the following details regarding the book you are searching for below:</p>
     
     <form action="{{ url_for('results') }}" method="post">
         <div class="inputwrapper">

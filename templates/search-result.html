@@ -1,18 +1,21 @@
 {% extends "layout.html" %}
 
-    <!-- Heading -->
-    {% block heading %}
-        {{ headline }}
-    {% endblock %}
-
     <!-- Body -->
     {% block body %}
     <!-- Testing the post request -->
-    <p>Successful search.</p>
+    <h1>Search Results</h1>
     
-    <p>The ISBN number is {{ isbn }}.</p>
-    <p>The author is {{ author }}.</p>
-    <p>The title of the book is {{ title }}.</p>
+    <ul>
+        {% for book in books %}
+            <li>
+                <p>Book ID: {{ book.id }}</p>
+                <p><b>Book title: {{ book.title }}</b></p> 
+                <p>Book author: {{ book.author }}</p>
+                <p>ISBN number: {{ book.isbn }}</p>
+            </li>
+        {% endfor %}
+    </ul>
     
-    <a href="{{ url_for('logout') }}">Click here to logout.</a>
+    <a href="{{ url_for('logout') }}">Click here to logout.</a><br>
+    <a href="{{ url_for('search') }}">Click  here to go back to search.</a>
     {% endblock %}
