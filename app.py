@@ -70,8 +70,8 @@ def results():
     author=request.form.get("author")
 
     # List all books found in the db that matches
-    books =  db.execute("SELECT * FROM books WHERE isbn = :isbn OR title = :title OR author = :author", {"isbn": isbn, "title": title, "author": author}).fetchall()
-    bookNotFound = db.execute("SELECT * FROM books WHERE isbn = :isbn OR title = :title OR author = :author", {"isbn": isbn, "title": title, "author": author}).rowcount == 0
+    books =  db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).fetchall()
+    bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).rowcount == 0
     
     if bookNotFound:
         headline ="No book was found."
@@ -98,6 +98,5 @@ def is_registered():
         headline="Successful registration. Please log in by clicking the link below to be redirected back to the home page."
         return render_template("registrationsuccess.html", headline=headline, name=name,  password=password)
     db.commit()   
-
 
     
