@@ -1,0 +1,15 @@
+<!-- The default page -->
+{% extends "layout.html" %}
+
+    <!-- Body -->
+    {% block body %}
+    <!-- Display username -->
+    <p>Your username is {{ username }}.</p>
+    <p>Your rating was {{ rating }}.</p>
+    <p>Your review is: {{ reviewText }}</p>
+    <p>Thank you for your review.</p>
+
+    
+
+    <a href="{{ url_for('index') }}">Click here to logout.</a>
+    {% endblock %}

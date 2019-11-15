@@ -44,12 +44,11 @@ def search():
     password= request.form.get("password")
     
     # Check if name and password are already in the database
-    isLoggedIn = db.execute("SELECT name, password FROM users WHERE name = :name AND password = :password", {"name": name, "password": password}).rowcount > 0;
+    isLoggedIn = db.execute("SELECT name, password FROM users WHERE name = :name AND password = :password", {"name": name, "password": password}).rowcount > 0
     if isLoggedIn == True: 
         # If match, render search page and continue
         headline="Fill out the form below to start searching for books."
         return render_template("search.html", headline=headline)
-        isLoggedIn = True
     elif isLoggedIn == False:
         # If name and password is NOT in the table, revert to login page
         headline="You entered an invalid username and password. Please try again or register for an account."
@@ -58,13 +57,10 @@ def search():
 @app.route("/logout")
 def logout():
     headline="You have successfully logged out."
-    isLoggedIn = False
     return render_template("logout.html", headline=headline)
 
-# TODO
 @app.route("/results", methods=["POST", "GET"])
 def results():
-    isLoggedIn = True
     isbn=request.form.get("isbn")
     title=request.form.get("title")
     author=request.form.get("author")
@@ -131,30 +127,52 @@ def bookdetails(book_id):
 
     # Make sure book exists by its book_id
     book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+    reviews = db.execute("SELECT * FROM reviews WHERE book_id  = :book_id", {"book_id": book.isbn})
     if book is None:
         headline = "Book not found."
         return render_template("error.html", headline=headline)
     
     # Get book details & render onto page
-    return render_template("bookdetails.html", book=book)
+    return render_template("bookdetails.html", book=book, reviews=reviews)
 
-# TODO
-@app.route("/review/<int:book_id>", methods=["POST", "GET"])
+@app.route("/reviews/<int:book_id>")
 def review(book_id):
-    user_id=request.form.get("username")
-    rating=request.form.get("rating")
-    reviewText=request.form.get("reviewText")
+    # Check book is in databasea
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+    if book is None:
+        headline = "Book not found."
+        return render_template("error.html", headline=headline)
 
-    print(f"{user_id} has added their review of {book_id} with a rating of {rating} and a review of {review}.")
+    # Render review page
+    headline = "Fill in the review form below and press submit."
+    return render_template("review.html", headline=headline)
 
-    if not reviewText or not rating:
-        headline ="Could not submit review."
-        return render_template("error.html", headline-headline)
-    
-    return render_template("bookdetails.html", review=review)
+@app.route("/submissionsuccess", methods=["POST"])
+def submission():
+    username= request.form.get("username")
+    reviewText= request.form.get("reviewText")
+    rating= request.form.get("rating")
+    isbn = request.form.get("isbn")
 
-# Check if review exists in database already for this user
-    # Select * FROM reviews JOIN users ON reviews.user_id = users.name WHERE reviews.user_id = user_id
-# If it doesn't
-    # INSERT INTO reviews (book_id, user_id, review, rating) VALUES (:book_id, :user_id, :review, :rating), {'book_id': isbn, 'user_id': user_id, 'review': reviewText, 'rating':rating}
+    # Make sure book exists
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    if book is None:
+        headline = "Book not found."
+        return render_template("error.html", headline=headline)
+
+    # Check if this user already made a review by checking username and isbn
+    alreadyReviewed = db.execute("SELECT user_id, book_id FROM reviews WHERE user_id = :user_id AND book_id = :book_id", {"user_id": username, "book_id": isbn}).rowcount > 0
+
+    if alreadyReviewed:
+        currentReview = db.execute("SELECT user_id, book_id FROM reviews WHERE user_id = :user_id AND book_id = :book_id", {"user_id": username, "book_id": isbn}).fetchone()
+        headline = "You have already submitted a review for this book."
+        return render_template("submission.html", headline=headline, username=username, reviewText=currentReview.review, rating=currentReview.rating)
+    elif not alreadyReviewed:
+    # Insert into reviews table
+        db.execute("INSERT INTO reviews(user_id, review, rating, book_id) VALUES (:user_id, :review, :rating, :book_id)", {"user_id": username, "review": reviewText, "rating": rating, "book_id": isbn})
+        db.commit()
+        headline="Your submission was successful."
+        return render_template("submission.html", headline=headline, username=username, reviewText=reviewText, rating=rating)
+
+
     
