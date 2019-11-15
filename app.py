@@ -71,8 +71,7 @@ def results():
 
     # List all books found in the db that matches
     # If ONLY ISBN is entered
-    # TODO FIX the ones that don't work
-    if not(author and title):
+    if not author and not title:
         books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn", {"isbn": '%'+ isbn + '%'}).rowcount == 0
     # Only isbn and author is filled out
@@ -84,7 +83,7 @@ def results():
         books = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title", {"isbn": '%'+ isbn + '%', "title":'%'+ title + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title", {"isbn": '%'+ isbn + '%', "title":'%'+ title + '%'}).rowcount == 0
     # If only author was filled out
-    if not(title and isbn):
+    if not title and not isbn:
         books = db.execute("SELECT * FROM books WHERE author ILIKE :author", {"author": '%'+ author + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE author ILIKE :author", {"author": '%'+ author + '%'}).rowcount == 0
     # Only author and title are filled in
@@ -92,13 +91,13 @@ def results():
         books = db.execute("SELECT * FROM books WHERE title ILIKE :title AND author ILIKE :author", {"title": '%'+ title + '%', "author":'%'+ author + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE title ILIKE :title AND author ILIKE :author", {"title": '%'+ title + '%', "author":'%'+ author + '%'}).rowcount == 0
     #  Only title is filled in
-    if not(author and isbn):
+    if not author and not isbn:
         books = db.execute("SELECT * FROM books WHERE title ILIKE :title", {"title": '%'+ title + '%'}).fetchall()
         bookNotFound = db.execute("SELECT * FROM books WHERE title ILIKE :title", {"title": '%'+ title + '%'}).rowcount == 0
     # All fields are filled in
     else:
-        books =  db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).fetchall()
-        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn OR title ILIKE :title OR author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).rowcount == 0
+        books =  db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title AND author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).fetchall()
+        bookNotFound = db.execute("SELECT * FROM books WHERE isbn ILIKE :isbn AND title ILIKE :title AND author ILIKE :author", {"isbn": '%'+ isbn + '%', "title": '%' + title + '%', "author":'%'+ author + '%'}).rowcount == 0
     
     if bookNotFound:
         headline ="No book was found."
@@ -142,7 +141,6 @@ def bookdetails(book_id):
 # TODO
 @app.route("/review/<int:book_id>", methods=["POST", "GET"])
 def review(book_id):
-    book_id = book_id
     user_id=request.form.get("username")
     rating=request.form.get("rating")
     reviewText=request.form.get("reviewText")
