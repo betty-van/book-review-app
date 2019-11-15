@@ -1,0 +1,14 @@
+{'books': 
+    [
+        {'id': 6631792, 
+        'isbn': '0007233701', 
+        'isbn13': '9780007233700', 
+        'ratings_count': 27690, 
+        'reviews_count': 51314, 
+        'text_reviews_count': 2016, 
+        'work_ratings_count': 32456, 
+        'work_reviews_count': 61114, 
+        'work_text_reviews_count': 2746, 
+        average_rating': '3.66'}
+    ]
+}

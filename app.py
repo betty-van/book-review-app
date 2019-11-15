@@ -1,9 +1,11 @@
 # Goodreads API
 # key: Ofp1GU7uUbEelrn6ZrT9w
 # secret: Ywf8dKYfvqVbmNoUJwNGZgH2lHAFciC7rzQbu2Ds4s
+# DATABASE_URL=postgres://xpsrascgzfgxzm:b7668097ffd03198d922523344120670dd76f03a849c9977a804cd2ab5631c46@ec2-54-197-239-115.compute-1.amazonaws.com:5432/d2ebb11rclhqv
 import os
 
 import requests
+import json
 from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -131,6 +133,13 @@ def bookdetails(book_id):
     if book is None:
         headline = "Book not found."
         return render_template("error.html", headline=headline)
+
+    # Get Goodreads avg rating and number of ratings
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "Ofp1GU7uUbEelrn6ZrT9w", "isbns": book.isbn})
+    book = res.json()
+    average_rating = book['books'][0]['average_rating']
+    rating_number = book['books'][0]['work_ratings_count']
+
     
     # Get book details & render onto page
     return render_template("bookdetails.html", book=book, reviews=reviews)
@@ -174,5 +183,41 @@ def submission():
         headline="Your submission was successful."
         return render_template("submission.html", headline=headline, username=username, reviewText=reviewText, rating=rating)
 
+@app.route("/api/<string:isbns>", methods=["GET"])
+def api(isbns):
+    # Check if ISBN is in database
+    inDatabase = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbns}).rowcount > 0
+    if not inDatabase:
+        headline="404 error, ISBN not found in database."
+        return render_template("error.html", headline=headline)
+
+    # Get book in database
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbns}).fetchone()
+
+    # Get Goodreads api
+    credentials= "Ofp1GU7uUbEelrn6ZrT9w"
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": credentials, "isbns": isbns})
+    bookJSON = res.json()
+
+    average_rating = bookJSON['books'][0]['average_rating']
+    rating_number = bookJSON['books'][0]['work_ratings_count']
+
+    headline="JSON Object"
+
+    # Make sure printing correct variables
+    myJSON = {
+        "title": book.title,
+        "isbn": book.isbn,
+        "year": book.year,
+        "author": book.author,
+        "review_count": rating_number,
+        "average_rating": average_rating
+    }
+
+    print(json.dumps(myJSON, indent=4))
+    return render_template("json.html", book=book, headline=headline, average_rating=average_rating, rating_number=rating_number)
+
+
+    
 
     
