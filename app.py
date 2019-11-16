@@ -6,7 +6,7 @@ import os
 
 import requests
 import json
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -214,8 +214,7 @@ def api(isbns):
         "average_rating": average_rating
     }
 
-    print(json.dumps(myJSON, indent=4))
-    return render_template("json.html", book=book, headline=headline, average_rating=average_rating, rating_number=rating_number)
+    return jsonify(myJSON)
 
 
     
