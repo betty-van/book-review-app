@@ -188,8 +188,7 @@ def api(isbns):
     # Check if ISBN is in database
     inDatabase = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbns}).rowcount > 0
     if not inDatabase:
-        headline="404 error, ISBN not found in database."
-        return render_template("error.html", headline=headline)
+        return ({"error": "Invalid isbns"}), 404
 
     # Get book in database
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbns}).fetchone()
