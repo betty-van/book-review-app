@@ -14,6 +14,10 @@
         text-align: center;
     }
 
+    .hidden {
+        display: none;
+    }
+
     header {
         display: flex;
         justify-content: center;
@@ -23,6 +27,22 @@
         min-height: 50px;
         background-color: #3a7bb3;
         background-image: linear-gradient(120deg, #3a7bb3 12%, #493e84 89%, #92d9f5 100%);
+    }
+
+    button {
+        background-color: rgb(68, 68, 144);
+        color: rgb(246, 241, 241);
+        text-decoration: none;
+        padding: 8px 20px;
+        font-size: 14px;
+        margin: 5px;
+    }
+    
+    button:hover {
+        background-color: rgba(176, 176, 192, 0.733);
+        color: rgb(18, 18, 58);
+        -webkit-transition-duration: 0.4s; 
+        transition-duration: 0.4s;
     }
 
     h1 {
@@ -61,9 +81,18 @@
     <header>
         <h1>Book Review Website</h1>
     </header>
+
+    <nav>
+        <a href="{{ url_for('index') }}"><button>Login</button></a>
+        <a href="{{ url_for('register') }}"><button>Register</button></a>
+        <a href="{{ url_for('search') }}"><button>Search</button></a>
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </nav>
+
     <h2>{% block heading %}{{ headline }}{% endblock %}</h2>
 
     {% block body %}
     {% endblock %}
+
 </body>
 </html>

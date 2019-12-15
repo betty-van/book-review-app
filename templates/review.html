@@ -3,13 +3,9 @@
     <!-- Body -->
     {% block body %}
     <!-- Testing the post request -->
-    
     <form action="{{ url_for('submission') }}" method="post">
-            <div class="inputwrapper">
-                <label for="username">Username: </label><input type="text" name="username">
-            </div>
-            <div class="inputwrapper">
-                <label for="isbn">ISBN Number: </label><input type="text" name="isbn">
+            <div class="inputwrapper hidden">
+                <label for="bookID">Book ID: </label><input type="number" name="bookID" value="{{ book_id }}" placeholder="{{ book_id }}" required readonly>
             </div>
             <textarea name="reviewText" cols="100" rows="10">Write your review here...</textarea>
             <div class="inputwrapper">
@@ -17,6 +13,7 @@
             </div>
             <button>Submit Review</button>
         </form>
-    
-    <a href="{{ url_for('logout') }}">Click here to logout.</a>
+
+    {{ session["username"] }}<br>
+
     {% endblock %}

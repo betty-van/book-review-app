@@ -9,7 +9,7 @@
     <p>Book author: {{ book.author }}</p>
     <p>ISBN number: {{ book.isbn }}</p>
     <p>Year published: {{ book.year }}</p>
-    <p>Book ID: {{ book.id }}</p>
+    <p class="hidden">Book ID: {{ book.id }}</p>
     <p>Number of reviews: {{ ratings_number }}</p>
     <p>Average rating: {{ average_rating }}</p>
 
@@ -25,6 +25,7 @@
             <li>No reviews for this book yet.</li>
         {% endfor %}
     </ol>
-    
-    <a href="{{ url_for('logout') }}">Click here to logout.</a><br>
+
+    {{ session["username"] }}<br>
+    <a href="{{ url_for('review', book_id=book.id) }}">Click here to post a review.</a><br>
     {% endblock %}

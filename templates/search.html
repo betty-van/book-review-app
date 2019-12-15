@@ -18,5 +18,5 @@
         <button>Search</button>
     </form>
     
-    <a href="{{ url_for('logout') }}">Click here to logout.</a>
+    {{ session["username"] }}<br>
     {% endblock %}
