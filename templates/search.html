@@ -6,17 +6,20 @@
     <p>Enter the following details regarding the book you are searching for below:</p>
     
     <form action="{{ url_for('results') }}" method="post" class="search_form">
-        <div class="inputwrapper">
-            <label for="isbn">ISBN: </label><input type="text" name="isbn">
+        <div class="inputwrapper_isbn">
+            <label for="isbn">ISBN:  </label><br>
+            <input type="text" name="isbn">
         </div>
-        <div class="inputwrapper">
-            <label for="title">Book title: </label><input type="text" name="title">
+        <div class="inputwrapper_title">
+            <label for="title">Title:  </label><br>
+            <input type="text" name="title">
         </div>
-        <div class="inputwrapper">
-            <label for="author">Author: </label><input type="text" name="author">
+        <div class="inputwrapper_author">
+            <label for="author">Author: </label><br>
+            <input type="text" name="author">
         </div>
         <button class="search_form_submit">Search</button>
     </form>
     
-    {{ session["username"] }}<br>
+    Hello, {{ session["username"] }}. Welcome to Book Review Website.<br>
     {% endblock %}

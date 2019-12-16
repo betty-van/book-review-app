@@ -3,7 +3,7 @@
     <!-- Body -->
     {% block body %}
     <!-- Book Details -->
-    <h2>Book Details</h2>
+    <h2 class="h2_title">Book Details</h2>
     
     <p><b>Book title: {{ book.title }}</b></p> 
     <p>Book author: {{ book.author }}</p>
@@ -13,7 +13,7 @@
     <p>Number of reviews: {{ ratings_number }}</p>
     <p>Average rating: {{ average_rating }}</p>
 
-    <h2>Reviews</h2>
+    <h2 class="h2_title">Reviews</h2>
     <ol>
         {% for review in reviews %}
             <li>
@@ -26,6 +26,7 @@
         {% endfor %}
     </ol>
 
+    <a href="{{ url_for('review', book_id=book.id) }}">Click here to post a review.</a><br><br>
     {{ session["username"] }}<br>
-    <a href="{{ url_for('review', book_id=book.id) }}">Click here to post a review.</a><br>
+   
     {% endblock %}

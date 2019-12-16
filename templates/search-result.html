@@ -5,14 +5,14 @@
     <!-- Testing the post request -->
     <h2>Search Results</h2>
     
-    <ul>
+    <ul class="search_results">
         {% for book in books %}
             <li>
                 <p class="hidden">Book ID: {{ book.id }}</p>
-                <p><b>Title: {{ book.title }}</b></p> 
-                <p>Author: {{ book.author }}</p>
-                <p>ISBN: {{ book.isbn }}</p>
-                <a href="{{ url_for('bookdetails', book_id=book.id) }}">Click here to more information.</a><br>
+                <p><span class="bold">Title:</span> {{ book.title }}</p> 
+                <p><span class="bold">Author:</span> {{ book.author }}</p>
+                <p><span class="bold">ISBN:</span> {{ book.isbn }}</p>
+                <p><a href="{{ url_for('bookdetails', book_id=book.id) }}"><button class="more_info_btn">Click here to more information.</button></a></p>
             </li>
         {% endfor %}
     </ul>
